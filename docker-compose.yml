@@ -1,0 +1,46 @@
+version: "3"
+services:
+
+ registryservice:
+   image: registryservice
+   container_name: "registryservice"
+   ports:
+     - 8761:8761
+   
+     
+ mondodb:
+   image: mongo:latest
+   container_name: "mondodb"
+   ports:
+     - 27017:27017
+     
+ databaseservice:
+   image: databaseservice
+   container_name: "databaseservice"
+   ports:
+     - 8095:8095
+   links:
+     - mondodb
+     - registryservice
+        
+ auth-service:
+   image: auth-service
+   container_name: "auth-service"
+   ports:
+     - 9100:9100
+   links:
+     - registryservice
+     - databaseservice
+      
+      
+ gateway-service:
+   image: gateway-service
+   container_name: "gateway-service"
+   ports:
+     - 8762:8762
+   links:
+     - registryservice
+     - databaseservice
+     - auth-service
+    
+    
